@@ -1,0 +1,14 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+ SELECT ?Dataset ?Theme ?Description ?FullDescription
+WHERE {
+  ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/linked-data/cube#DataSet>.
+  ?s <http://purl.org/dc/terms/title> ?DatasetName.
+  ?s <http://www.w3.org/ns/dcat#theme> ?theme.
+  ?theme rdfs:label ?Theme.
+  ?s <http://www.w3.org/2000/01/rdf-schema#comment> ?Description.
+  ?s <http://purl.org/dc/terms/description> ?LongDescription.
+  bind(concat("<a href='",str(?s),"'>",?DatasetName,"</a>") as $Dataset)
+  bind(concat(?DatasetName," ",?Theme," ",?Description," ",?LongDescription) as $FullDescription)
+}
+ORDER BY  ?DatasetName 

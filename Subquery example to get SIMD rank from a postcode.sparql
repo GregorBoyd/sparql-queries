@@ -1,0 +1,24 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+
+SELECT ?DZ ?Rank
+WHERE {
+?s rdf:type  <http://data.ordnancesurvey.co.uk/ontology/postcode/PostcodeUnit>.
+?s rdfs:label "EH7 5EY"  .
+?s <http://statistics.gov.scot/def/postcode/dataZone2001> ?DZ.  
+  
+  	{ SELECT *
+      WHERE {
+          ?d qb:dataSet   <http://statistics.gov.scot/data/scottish-index-multiple-deprivation>.
+          ?d <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/overall>.
+          ?d <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2012>. 
+          ?d <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/rank>.
+          ?d <http://statistics.gov.scot/def/measure-properties/rank> ?Rank.
+          ?d <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?DZ.
+          }
+	}
+}
+
+LIMIT 10

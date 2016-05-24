@@ -1,0 +1,23 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+
+SELECT 	?CouncilName (COUNT(*) AS ?NumberOf15pcMostDeprivedDataZones)
+WHERE 	{
+        ?s qb:dataSet   <http://statistics.gov.scot/data/scottish-index-multiple-deprivation>.
+        ?s <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/overall>.
+        ?s <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2012>. 
+        ?s <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/vigintile>.
+        ?s <http://statistics.gov.scot/def/measure-properties/vigintile> ?SIMDvigintile.
+        ?s <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?DZ.
+	FILTER (?SIMDvigintile<=3)
+  
+    	{ SELECT *
+      	WHERE {
+	 	?DZ <http://statistics.gov.scot/def/hierarchy/best-fit#council-area> ?CouncilArea.
+        	?CouncilArea rdfs:label ?CouncilName.  
+		}
+  	}
+	}
+GROUP BY ?CouncilName
+ORDER BY ?CouncilName
+LIMIT 100

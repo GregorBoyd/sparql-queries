@@ -1,0 +1,15 @@
+SELECT ?DZCode ?IZCode ?CouncilAreaCode ?HealthBoardCode ?SPCCode ?CHPCode
+WHERE {
+ ?s <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.gov.scot/id/statistical-entity/S01>;
+	<http://www.w3.org/2004/02/skos/core#notation> ?DZCode;
+	<http://statistics.gov.scot/def/hierarchy/best-fit#community-health-partnership> ?CHP;
+	<http://statistics.gov.scot/def/hierarchy/best-fit#council-area> ?CouncilArea;
+	<http://statistics.gov.scot/def/hierarchy/best-fit#health-board-area> ?HealthBoard;
+	<http://statistics.gov.scot/def/hierarchy/best-fit#intermediate-zone> ?IZ;
+	<http://statistics.gov.scot/def/hierarchy/best-fit#scottish-parliamentary-consituency> ?SPC. 
+ ?CHP <http://www.w3.org/2004/02/skos/core#notation> ?CHPCode.
+ ?CouncilArea <http://www.w3.org/2004/02/skos/core#notation> ?CouncilAreaCode.
+ ?HealthBoard <http://www.w3.org/2004/02/skos/core#notation> ?HealthBoardCode.
+ ?IZ <http://www.w3.org/2004/02/skos/core#notation> ?IZCode.
+ ?SPC <http://www.w3.org/2004/02/skos/core#notation> ?SPCCode.
+ }

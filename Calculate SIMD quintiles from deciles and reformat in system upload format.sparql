@@ -1,0 +1,18 @@
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sdmx: <http://purl.org/linked-data/sdmx/2009/concept#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?GeographyCode ?DateCode ("Quintile"AS ?Measurement) ("Quintile"AS ?Units) (CEIL((?Decile)/2) AS ?Value) ?SIMDDomain
+WHERE { 
+?d qb:dataSet   <http://statistics.gov.scot/data/scottish-index-multiple-deprivation>; 
+	<http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?DZ.
+	?DZ rdfs:label ?GeographyCode.  
+?d <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ?Date.
+	?Date rdfs:label ?DateCode. 
+?d <http://statistics.gov.scot/def/dimension/simdDomain> ?Domain.
+	?Domain rdfs:label ?SIMDDomain. 
+?d <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/decile>; 
+	<http://statistics.gov.scot/def/measure-properties/decile> ?Decile. 
+} 
+LIMIT 10

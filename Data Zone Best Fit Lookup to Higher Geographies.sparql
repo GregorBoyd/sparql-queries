@@ -6,7 +6,7 @@ WHERE {
 	<http://statistics.gov.scot/def/hierarchy/best-fit#council-area> ?CouncilArea;
 	<http://statistics.gov.scot/def/hierarchy/best-fit#health-board-area> ?HealthBoard;
 	<http://statistics.gov.scot/def/hierarchy/best-fit#intermediate-zone> ?IZ;
-	<http://statistics.gov.scot/def/hierarchy/best-fit#scottish-parliamentary-consituency> ?SPC. 
+	<http://statistics.gov.scot/def/hierarchy/best-fit#scottish-parliamentary-constituency> ?SPC. 
  ?CHP <http://www.w3.org/2004/02/skos/core#notation> ?CHPCode.
  ?CouncilArea <http://www.w3.org/2004/02/skos/core#notation> ?CouncilAreaCode.
  ?HealthBoard <http://www.w3.org/2004/02/skos/core#notation> ?HealthBoardCode.

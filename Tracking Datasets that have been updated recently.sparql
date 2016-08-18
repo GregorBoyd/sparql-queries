@@ -3,10 +3,14 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-SELECT ?Dataset ?Modified
+SELECT ?Dataset ?Modified ?Publisher
 WHERE {
   ?s rdf:type <http://purl.org/linked-data/cube#DataSet>;
      rdfs:label ?Dataset;
-    dcterms:modified ?Modified. 
+     dcterms:publisher ?Pub;
+     dcterms:modified ?Modified. 
+  ?Pub rdfs:label ?Publisher.
   FILTER (?Modified > "2016-07-01T00:00:00"^^xsd:dateTime)
 }
+
+ORDER BY ?Modified

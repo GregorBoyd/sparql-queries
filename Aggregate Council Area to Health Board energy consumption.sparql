@@ -1,0 +1,23 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+
+SELECT ?GeographyCode ?Date ?EnergyType ?CustomerType (ROUND(SUM(?value)*10)/10 AS ?Value) 
+WHERE {
+ ?s <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.gov.scot/id/statistical-entity/S12>;
+<http://publishmydata.com/def/ontology/spatial/within> ?Within.
+  ?Within <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.gov.scot/id/statistical-entity/S08>;
+  <http://www.w3.org/2004/02/skos/core#notation> ?GeographyCode.
+  ?o qb:dataSet <http://statistics.gov.scot/data/energy-consumption>;
+    <http://statistics.gov.scot/def/measure-properties/count> ?value;
+     <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?s;
+     <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ?refPeriod;
+     <http://statistics.gov.scot/def/dimension/customerType> ?custType;
+     <http://statistics.gov.scot/def/dimension/energyType> ?energyType.
+  
+  ?refPeriod rdfs:label ?Date.
+  ?energyType rdfs:label ?EnergyType.
+  ?custType rdfs:label ?CustomerType.
+  
+  }
+GROUP BY ?Date ?GeographyCode ?EnergyType ?CustomerType
+ORDER BY ?Date ?GeographyCode ?EnergyType ?CustomerType

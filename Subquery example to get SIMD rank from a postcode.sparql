@@ -6,13 +6,13 @@ PREFIX qb: <http://purl.org/linked-data/cube#>
 SELECT ?DZ ?Rank
 WHERE {
 ?s rdf:type  <http://data.ordnancesurvey.co.uk/ontology/postcode/PostcodeUnit>.
-?s rdfs:label "EH7 5EY"  .
+?s rdfs:label "EH1 3DG"  .
 ?s <http://statistics.gov.scot/def/postcode/dataZone2001> ?DZ.  
   
   	{ SELECT *
       WHERE {
           ?d qb:dataSet   <http://statistics.gov.scot/data/scottish-index-multiple-deprivation>.
-          ?d <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/overall>.
+          ?d <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/simd>.
           ?d <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2012>. 
           ?d <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/rank>.
           ?d <http://statistics.gov.scot/def/measure-properties/rank> ?Rank.

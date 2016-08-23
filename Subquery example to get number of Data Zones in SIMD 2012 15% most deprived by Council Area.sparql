@@ -4,7 +4,7 @@ PREFIX qb: <http://purl.org/linked-data/cube#>
 SELECT 	?CouncilName (COUNT(*) AS ?NumberOf15pcMostDeprivedDataZones)
 WHERE 	{
         ?s qb:dataSet   <http://statistics.gov.scot/data/scottish-index-multiple-deprivation>.
-        ?s <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/overall>.
+        ?s <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/simd>.
         ?s <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2012>. 
         ?s <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/vigintile>.
         ?s <http://statistics.gov.scot/def/measure-properties/vigintile> ?SIMDvigintile.

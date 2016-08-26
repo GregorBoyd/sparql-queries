@@ -5,7 +5,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT ?Dataset ?Modified ?Publisher
 WHERE {
-  ?s rdf:type <http://purl.org/linked-data/cube#DataSet>;
+  ?s rdf:type <http://publishmydata.com/def/dataset#Dataset>;
      rdfs:label ?Dataset;
      dcterms:publisher ?Pub;
      dcterms:modified ?Modified. 

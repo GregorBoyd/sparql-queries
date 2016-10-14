@@ -1,0 +1,11 @@
+SELECT ?LACode ?LAName ?HigherGeogCode ?HigherGeogName
+WHERE {
+?s <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.gov.scot/id/statistical-entity/S12>;
+<http://www.w3.org/2004/02/skos/core#notation> ?LACode;
+<http://statistics.data.gov.uk/def/statistical-geography#officialname> ?LAName;   
+<http://publishmydata.com/def/ontology/spatial/within> ?HigherGeogURI.
+?HigherGeogURI <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.gov.scot/id/statistical-entity/S08>;
+ <http://www.w3.org/2004/02/skos/core#notation> ?HigherGeogCode;
+<http://statistics.data.gov.uk/def/statistical-geography#officialname> ?HigherGeogName. 
+}
+ORDER BY ?LACode

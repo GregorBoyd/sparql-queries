@@ -1,0 +1,35 @@
+# This article was really helpful and is where I got the code: http://www.programmingr.com/content/sparql-with-r/
+library(SPARQL) # SPARQL querying package
+library(ggplot2)
+
+# Step 1 - Set up preliminaries and define query
+# Define the statistics.gov.scot endpoint
+endpoint <- "http://statistics.gov.scot/sparql"
+
+# create query statement
+query <-
+  "PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?year ?sector ?CO2
+WHERE {
+?s qb:dataSet <http://statistics.gov.scot/data/greenhouse-gas-emissions-by-source-sector>;
+<http://statistics.gov.scot/def/dimension/greenhouseGasSourceSector> ?SectorURI;
+<http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ?yearURI;
+<http://statistics.gov.scot/def/dimension/pollutant> <http://statistics.gov.scot/def/concept/pollutant/co2>;
+<http://statistics.gov.scot/def/measure-properties/count> ?CO2.
+?SectorURI rdfs:label ?sector.
+?yearURI rdfs:label ?year.
+}
+ORDER BY ?year ?sector"
+
+# Step 2 - Use SPARQL package to submit query and save results to a data frame
+qdata <- SPARQL(endpoint,query)
+CO2data <- qdata$results
+
+# Step 3 Limit the dataframe to 1998 onwars and exlude some of the sectors.
+CO2data98on <- subset(CO2data, year >=1998 & sector!="Waste Management" & sector!="Public Sector Buildings" & sector!="Development" & sector!="International Aviation and Shipping") 
+
+# Step 4 USe ggplot2 to draw a basic linechart
+g=ggplot(data=CO2data98on, aes(x=year, y=CO2, group=sector)) +     geom_line(aes(color=sector), size=0.5)+ theme(legend.position="bottom")
+g+ggtitle('CO2 emissions by source sector, Scotland 1998-2014')  + labs (x="Year", y="CO2 Mt")

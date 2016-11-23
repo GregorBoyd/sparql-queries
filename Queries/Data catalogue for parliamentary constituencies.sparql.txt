@@ -1,0 +1,78 @@
+PREFIX dcterms: <http://purl.org/dc/terms/> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#> 
+
+ SELECT  ?Theme  ?Dataset (?s as ?WhereToFindIt) ?Owner  ("Scotland" as ?GeographicCoverage) 
+(str("2011 Constituencies of the Scottish Parliament") as ?GeographicUnit)
+?PopulationCoverageOrDefinition
+(str("Check dataset for details - most will be available from Data Zone level") as ?OtherTypicalGeographiesAvailable)
+?ReferencePeriodOfLatestRelease
+(str("Not Available") AS ?UpdateCycle)
+?StartOfReleaseSeries
+(CONCAT(STR(DAY(?Mod)), 
+                     "/", 
+                     STR(MONTH(?Mod)), 
+                     "/", 
+                    STR(YEAR(?Mod))) as ?LatestReleaseDate)  
+?NextReleaseDate
+?ContactEmail
+
+ WHERE { 
+   ?s rdf:type <http://publishmydata.com/def/dataset#Dataset>; 
+      dcat:theme ?ThemeURI;
+      rdfs:label ?Dataset; 
+      dcterms:publisher ?Pub; 
+      dcterms:modified ?Mod;
+      rdfs:comment  ?PopulationCoverageOrDefinition;
+      <http://publishmydata.com/def/dataset#contactEmail> ?ContactEmail.
+
+    ?Pub rdfs:label ?Owner.
+    ?ThemeURI <http://publishmydata.com/def/ontology/folder/parentFolder> 
+
+<http://statistics.gov.scot/def/concept/folders/themes>;
+    		 rdfs:label ?Theme.
+   
+  { SELECT ?s ?Comp1 WHERE{
+   ?s   <http://purl.org/linked-data/cube#structure> ?Structure.
+ ?Structure <http://purl.org/linked-data/cube#component> ?Comp1.
+   ?Comp1 qb:dimension <http://purl.org/linked-data/sdmx/2009/dimension#refArea>.
+   ?Comp1 qb:codeList ?RefAreas.
+   ?RefAreas <http://www.w3.org/2004/02/skos/core#member> <http://statistics.gov.scot/id/statistical-geography/S16000074>.
+}
+}
+ 
+   
+   
+   { SELECT ?s   (max(?RefPeriods) as ?ReferencePeriodOfLatestRelease) WHERE{
+   ?s   <http://purl.org/linked-data/cube#structure> ?Structure2.
+ ?Structure2 <http://purl.org/linked-data/cube#component> ?Comp2.
+   ?Comp2 qb:dimension <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod>.
+   ?Comp2 qb:codeList ?RefPeriodsCL.
+   ?RefPeriodsCL skos:member ?RefPeriodsURI.
+    ?RefPeriodsURI rdfs:label ?RefPeriods 
+     }
+    GROUP BY ?s 
+}  
+  
+   { SELECT ?s   (min(?RefPeriods2) as ?StartOfReleaseSeries) WHERE{
+   ?s   <http://purl.org/linked-data/cube#structure> ?Structure3.
+ ?Structure3 <http://purl.org/linked-data/cube#component> ?Comp3.
+   ?Comp3 qb:dimension <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod>.
+   ?Comp3 qb:codeList ?RefPeriodsCL2.
+   ?RefPeriodsCL2 skos:member ?RefPeriodsURI2.
+    ?RefPeriodsURI2 rdfs:label ?RefPeriods2 
+     }
+    GROUP BY ?s 
+}  
+   
+. 
+   
+OPTIONAL{?s       <http://publishmydata.com/def/dataset#nextUpdateDue> ?NextReleaseDate.}
+   
+ } 
+ 
+ORDER BY ?Theme ?Dataset

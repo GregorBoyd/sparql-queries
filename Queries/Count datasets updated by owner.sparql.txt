@@ -1,0 +1,41 @@
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?Owner ?Updated ?Total  (ROUND(xsd:integer(?Updated/(?Total)*100)) AS ?PercentUpdated)
+
+WHERE {
+
+  {SELECT ?Owner  
+ WHERE 
+   {
+   ?s rdf:type <http://publishmydata.com/def/dataset#Dataset>;
+dcterms:publisher ?Pub.
+?Pub rdfs:label ?Owner.
+}
+   GROUP BY ?Owner
+}
+  
+ OPTIONAL   {SELECT ?Owner (count(distinct ?s) as ?Updated) 
+WHERE {
+?s rdf:type <http://publishmydata.com/def/dataset#Dataset>;
+dcterms:publisher ?Pub;
+dcterms:modified ?Modified.
+?Pub rdfs:label ?Owner.
+FILTER (?Modified > "2016-07-01T00:00:00"^^xsd:dateTime)
+  }
+GROUP BY ?Owner      
+  }    
+  
+OPTIONAL  { SELECT ?Owner (count(distinct ?s) as ?Total)
+WHERE {
+?s rdf:type <http://publishmydata.com/def/dataset#Dataset>;
+dcterms:publisher ?Pub.
+  ?Pub rdfs:label ?Owner.
+  }
+GROUP BY ?Owner      
+  } 
+
+  }
+ORDER BY  ?Owner

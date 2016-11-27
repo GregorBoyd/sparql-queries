@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!-- This code creates a simple html data for data obtained from statistics.gov.scot using a sparql query -->
+<!-- The sparql query used is available at: https://github.com/GregorBoyd/sparql-queries/blob/master/Queries/Count%20datasets%20updated%20by%20owner.sparql.txt -->
+
+<html>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<head>
+	<title> Datasets Updated on Statistics.gov.scot </title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script> document.addEventListener("DOMContentLoaded", function() {
+  myFunction();
+}); 
+</script>
+
+<!-- Add hover over colour to table -->
+<!-- Right align the columns with numbers -->
+<style>
+#table tr:hover {background-color: #FFA500;}
+tr th:nth-child(2) {  text-align: right;}
+tr th:nth-child(3) {  text-align: right;}
+tr th:nth-child(4) {  text-align: right;}
+tr td:nth-child(2) {  text-align: right;}
+tr td:nth-child(3) {  text-align: right;}
+tr td:nth-child(4) {  text-align: right;}
+</style>
+</head>
+<body>
+
+<div class="w3-row-padding">
+	<h1> Statistics.gov.scot datasets updated since launch</h1>
+
+	<script type="text/javascript">
+	<!-- Get results of sparql query in JSON format -->
+	function myFunction() {
+		var query = "PREFIX dcterms: <http://purl.org/dc/terms/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ?Owner ?Updated ?Total  (ROUND(xsd:integer(?Updated/(?Total)*100)) AS ?PercentUpdated) WHERE {   {SELECT ?Owner   WHERE    {    ?s rdf:type <http://publishmydata.com/def/dataset#Dataset>; dcterms:publisher ?Pub. ?Pub rdfs:label ?Owner. }    GROUP BY ?Owner }  OPTIONAL   {SELECT ?Owner (count(distinct ?s) as ?Updated) WHERE { ?s rdf:type <http://publishmydata.com/def/dataset#Dataset>; dcterms:publisher ?Pub; dcterms:modified ?Modified. ?Pub rdfs:label ?Owner. FILTER (?Modified > "+"'2016-07-01T00:00:00'"+"^^xsd:dateTime)  } GROUP BY ?Owner        }     OPTIONAL  { SELECT ?Owner (count(distinct ?s) as ?Total) WHERE {?s rdf:type <http://publishmydata.com/def/dataset#Dataset>; dcterms:publisher ?Pub.  ?Pub rdfs:label ?Owner.  } GROUP BY ?Owner        }   } ORDER BY  ?Owner"
+
+		$.ajax({
+			method: "POST",
+			dataType: "json",
+			url: "http://statistics.gov.scot/sparql.json",
+			data: {query: query},
+			success: function(data, textStatus, jqXHR) {
+        drawTable(data);
+    }
+});
+<!-- Function to draw a table, row by row -->
+function drawTable(data) {
+    for (var i = 0; i < data.results.bindings.length; i++) {
+        drawRow(data.results.bindings[i]);
+    }
+}
+<!-- Function to fill rows of table -->
+function drawRow(rowData) {
+    var row = $("<tr />")
+    $("#table").append(row); 
+    row.append($("<td>" + rowData.Owner.value + "</td>"));
+	<!-- If statement used to check if the object exists - to deal with case of organisation not having updated any datasets -->
+    if(rowData.Updated)  {row.append($("<td>" + rowData.Updated.value + "</td>")); } else  {row.append($("<td>" + "0" + "</td>"));} 
+    row.append($("<td>" + rowData.Total.value + "</td>"));
+	if(rowData.PercentUpdated)  {row.append($("<td>" + rowData.PercentUpdated.value + "</td>")); } else  {row.append($("<td>" + "0" + "</td>"));} 
+}
+	};
+	  
+	</script>
+
+	<div class="w3-col">
+		<table id="table" class="w3-table-all">
+    <tr>
+        <th>Owner</th>
+        <th>Datasets Updated</th>
+        <th>Datasets Published</th>
+        <th>Percent Updated</th>
+    </tr>
+	</div>
+
+</div>
+
+</body>
+</html>

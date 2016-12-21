@@ -1,0 +1,33 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX qb: <http://purl.org/linked-data/cube#> 
+
+SELECT DISTINCT ?DZ ?Decile ?Rank
+WHERE { 
+?s rdf:type <http://data.ordnancesurvey.co.uk/ontology/postcode/PostcodeUnit>. 
+?s rdfs:label ?PC. 
+ 
+FILTER regex(?PC, "G83")
+?s <http://statistics.gov.scot/def/postcode/dataZone2011> ?DZuri. 
+?DZuri rdfs:label ?DZ. 
+   
+?r <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?DZuri. 
+?r qb:dataSet <http://statistics.gov.scot/data/scottish-index-of-multiple-deprivation-2016>. 
+?r <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/simd>. 
+?r <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2016>. 
+?r <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/decile>. 
+?r <http://statistics.gov.scot/def/measure-properties/decile> ?Decile. 
+
+?t <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?DZuri. 
+?t qb:dataSet <http://statistics.gov.scot/data/scottish-index-of-multiple-deprivation-2016>. 
+?t <http://statistics.gov.scot/def/dimension/simdDomain> <http://statistics.gov.scot/def/concept/simd-domain/simd>. 
+?t <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2016>. 
+?t <http://purl.org/linked-data/cube#measureType> <http://statistics.gov.scot/def/measure-properties/rank>. 
+?t <http://statistics.gov.scot/def/measure-properties/rank> ?Rank. 
+
+ }
+
+ORDER BY ?Rank
+
+LIMIT 100

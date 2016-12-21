@@ -1,0 +1,14 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+
+SELECT DISTINCT ?DZ
+WHERE { 
+	?s rdf:type <http://data.ordnancesurvey.co.uk/ontology/postcode/PostcodeUnit>. 
+	?s rdfs:label ?PC. 
+	FILTER regex(?PC, "G83")
+	?s <http://statistics.gov.scot/def/postcode/dataZone2011> ?DZuri. 
+	?DZuri skos:notation ?DZ. 
+}
+
+LIMIT 1000

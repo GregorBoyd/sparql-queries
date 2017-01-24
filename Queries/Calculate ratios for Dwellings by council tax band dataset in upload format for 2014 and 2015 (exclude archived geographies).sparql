@@ -1,0 +1,31 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+
+SELECT ?GeographyCode ?DateCode ("Ratio"AS ?Measurement) ("Percent Of Dwellings"AS ?Units)
+ (ROUND(((?Value1)/(?Value2)*100)) AS ?Value) ?CouncilTaxBand  ?Value1 ?Value2 	
+
+WHERE {
+?s <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?Geography.
+?s <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/%{year}>.
+?s <http://statistics.gov.scot/def/measure-properties/count> ?Value1.
+?s <http://statistics.gov.scot/def/dimension/councilTaxBand> ?DwellingBandURI.
+?DwellingBandURI rdfs:label ?CouncilTaxBand.  
+?s qb:dataSet <http://statistics.gov.scot/data/dwellings-council-tax>.
+MINUS {  ?s <http://statistics.gov.scot/def/dimension/councilTaxBand> <http://statistics.gov.scot/def/concept/council-tax-band/total-dwellings> }
+
+{SELECT *
+  WHERE {
+?d <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?Geography.
+?Geography <http://www.w3.org/2004/02/skos/core#notation> ?GeographyCode.
+?d <http://statistics.gov.scot/def/measure-properties/count> ?Value2.
+?d <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/%{year}>.
+?d <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ?Year.
+ ?Year  rdfs:label ?DateCode.   
+?d <http://statistics.gov.scot/def/dimension/councilTaxBand> <http://statistics.gov.scot/def/concept/council-tax-band/total-dwellings>.
+?d qb:dataSet <http://statistics.gov.scot/data/dwellings-council-tax>.
+MINUS {?Geography <http://statistics.data.gov.uk/def/statistical-geography#status> "Archived".}     
+}
+}
+}
+ORDER BY ?GeographyCode

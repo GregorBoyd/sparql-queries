@@ -1,0 +1,10 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?MeasureUnits (count(?MeasureUnits) as ?NumLabels)
+WHERE {
+  ?MeasureUnits a <http://purl.org/linked-data/sdmx/2009/concept#unitMeasure>.
+  ?MeasureUnits rdfs:label ?label .
+}
+GROUP BY ?MeasureUnits
+HAVING (?NumLabels>1)
+LIMIT 10

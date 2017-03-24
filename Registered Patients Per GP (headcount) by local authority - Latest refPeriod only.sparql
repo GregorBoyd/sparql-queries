@@ -1,0 +1,38 @@
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#>
+PREFIX se: <http://statistics.data.gov.uk/def/statistical-entity#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?LocalAuthority ?GPListSize ?GPHeadcount (ROUND(xsd:integer((?GPListSize)/(?GPHeadcount))) AS ?RegisteredPatientsPerGP)
+WHERE {
+  
+{  SELECT ?refPeriod
+WHERE {
+<http://statistics.gov.scot/def/code-list/general-practice-list-size/refPeriod>  skos:member ?refPeriod.
+  ?test rdfs:label ?Label
+}
+ORDER BY DESC(?Label)
+
+LIMIT 1 
+      }
+  
+  ?refAreaURI se:code <http://statistics.gov.scot/id/statistical-entity/S12>.   
+  ?refAreaURI rdfs:label ?LocalAuthority. 
+  
+  ?s1 qb:dataSet <http://statistics.gov.scot/data/general-practice-list-size>.
+  ?s1 qb:measureType <http://statistics.gov.scot/def/measure-properties/count>.
+  ?s1 dim:refPeriod ?refPeriod.
+  ?s1 <http://statistics.gov.scot/def/measure-properties/count> ?GPListSize. 
+  ?s1 dim:refArea ?refAreaURI.
+  
+  ?s2 qb:dataSet <http://statistics.gov.scot/data/headcount-of-general-practice-workforce>.
+  ?s2 qb:measureType <http://statistics.gov.scot/def/measure-properties/count>.
+  ?s2 dim:refPeriod ?refPeriod.
+  ?s2 <http://statistics.gov.scot/def/measure-properties/count> ?GPHeadcount.
+  ?s2 dim:refArea ?refAreaURI.
+    
+}
+  
+ORDER BY ?RegisteredPatientsPerGP

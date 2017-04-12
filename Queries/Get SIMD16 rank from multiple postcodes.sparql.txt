@@ -3,7 +3,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX qb: <http://purl.org/linked-data/cube#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?DZ ?Rank
+SELECT ?postcode ?DZ ?Rank
 WHERE {
 ?s rdf:type <http://data.ordnancesurvey.co.uk/ontology/postcode/PostcodeUnit>.
 ?s rdfs:label ?postcode.

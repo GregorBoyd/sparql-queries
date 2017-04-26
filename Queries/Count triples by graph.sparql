@@ -1,0 +1,4 @@
+SELECT DISTINCT ?g (count(?p) as ?triples)
+WHERE { GRAPH ?g { ?s ?p ?o } } 
+GROUP BY ?g
+ORDER BY DESC(?triples)

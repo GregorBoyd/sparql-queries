@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- This code creates a simple html data for data obtained from statistics.gov.scot using a sparql query -->
+<!-- This code creates a simple html table for data obtained from statistics.gov.scot using a sparql query -->
 <!-- The sparql query used is available at: https://github.com/GregorBoyd/sparql-queries/blob/master/Queries/Count%20datasets%20updated%20by%20owner.sparql.txt -->
 
 <html>

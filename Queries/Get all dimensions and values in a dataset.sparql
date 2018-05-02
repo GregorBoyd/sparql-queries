@@ -1,0 +1,27 @@
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sdmx: <http://purl.org/linked-data/sdmx/2009/concept#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX void: <http://rdfs.org/ns/void#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?dimension ?value
+WHERE { 
+  <http://statistics.gov.scot/data/energy-consumption> <http://purl.org/linked-data/cube#structure> ?structure.
+   ?structure <http://purl.org/linked-data/cube#component> ?component.
+?component qb:dimension ?dimensionURI.
+  ?component qb:codeList ?codeList.
+  #lose next line to keep all dimensions (inc measureType, refArea and refPeriod
+  ?dimensionURI rdfs:isDefinedBy <http://statistics.gov.scot/def/ontology/dimensions>.
+?codeList skos:member ?member.
+?dimensionURI rdfs:label ?dimension.
+  ?dimensionURI rdf:type <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property>.
+?member rdfs:label ?value.
+}
+
+
+LIMIT 100

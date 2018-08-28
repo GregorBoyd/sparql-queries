@@ -1,0 +1,21 @@
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?Name ?Address ?PercentPositiveDest
+WHERE {
+	?s <http://publishmydata.com/def/ontology/foi/memberOf> <http://statistics.gov.scot/def/foi/collection/education-establishments>;
+	<http://publishmydata.com/def/ontology/foi/within> <http://statistics.gov.scot/id/statistical-geography/S12000036>;
+	<http://statistics.gov.scot/def/education/hasDepartment> ?d;
+	<http://schema.org/address> ?Addr.
+	?Addr rdfs:label ?Address.
+	?d rdfs:label ?Name;
+	<http://statistics.gov.scot/def/education/departmentType> <http://statistics.gov.scot/def/concept/education/department-type/secondary>;
+	<http://statistics.gov.scot/def/education/status> <http://statistics.gov.scot/def/concept/education/status/open>.
+	?l qb:dataSet <http://statistics.gov.scot/data/positive-destinations>;
+	<http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/gregorian-interval/2016-08-01T00:00:00/P1Y>;
+	<http://statistics.gov.scot/def/dimension/comparator> <http://statistics.gov.scot/def/concept/comparator/real-establishment>;
+	<http://statistics.gov.scot/def/education/refEstablishment> ?s;
+	<http://statistics.gov.scot/def/measure-properties/percent> ?PercentPositiveDest.
+}
+ORDER BY ?Name
+LIMIT 100

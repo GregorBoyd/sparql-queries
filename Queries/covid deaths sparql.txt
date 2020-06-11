@@ -1,0 +1,34 @@
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sdmx: <http://purl.org/linked-data/sdmx/2009/concept#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX void: <http://rdfs.org/ns/void#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  ?Local_Authority  ?COVIDdeaths ?population (ROUND(((?COVIDdeaths)/(?population)*100000)) AS ?COVIDdeathsper100k)
+WHERE {
+  ?s <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?LA.
+  ?LA <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.gov.scot/id/statistical-entity/S12>.
+  ?LA rdfs:label ?Local_Authority.
+  ?s qb:dataSet <http://statistics.gov.scot/data/deaths-involving-coronavirus-covid-19>.
+  ?s <http://statistics.gov.scot/def/measure-properties/count> ?COVIDdeaths.
+  ?s <http://statistics.gov.scot/def/dimension/sex> <http://statistics.gov.scot/def/concept/sex/all>.
+  ?s <http://statistics.gov.scot/def/dimension/age> <http://statistics.gov.scot/def/concept/age/all>.
+  ?s <http://statistics.gov.scot/def/dimension/locationOfDeath> <http://statistics.gov.scot/def/concept/location-of-death/all>.
+  ?s <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2020>.
+  ?s <http://statistics.gov.scot/def/dimension/causeOfDeath> <http://statistics.gov.scot/def/concept/cause-of-death/covid-19-related>.
+  ?d <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?LA.
+  ?d <http://statistics.gov.scot/def/measure-properties/count> ?population.
+  ?d qb:dataSet <http://statistics.gov.scot/data/population-estimates-current-geographic-boundaries>.
+  ?d <http://statistics.gov.scot/def/dimension/sex> <http://statistics.gov.scot/def/concept/sex/all>.
+  ?d <http://statistics.gov.scot/def/dimension/age> <http://statistics.gov.scot/def/concept/age/all>.
+  ?d <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2019>.
+}
+
+ORDER BY ?Local_Authority
+
+LIMIT 100
